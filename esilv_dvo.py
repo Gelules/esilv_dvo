@@ -2,10 +2,10 @@
 
 from selenium import webdriver
 import wget
-import git
 import os
 import time
 import getpass
+
 
 def connection():
     username = input("Username: ")
@@ -22,26 +22,43 @@ def connection():
     return browser
 
 
+def get_homework(browser, url, name):
+    browser.get(url)
+    if not os.path.isdir(name):
+        os.mkdir(name)
+    os.chdir(name)
+
+    while True:
+        pass
+
+
 def get_homeworks(browser):
     if not os.path.isdir("homeworks"):
         os.mkdir("homeworks")
     os.chdir("homeworks")
 
-    projects = []
+    courses_url = []
+    courses_name = []
     time.sleep(5)
 
     course_button = browser.find_element_by_class_name("d2l-dropdown-opener")
     course_button.click()
 
-    course = input("Quel cours? : ")
-
     for links in browser.find_elements_by_tag_name("a"):
-        link = links.get_attribute("class")
-        if link.startswith(""):
-            projects.append(link)
+        id = links.get_attribute("id")
+        if "d2l_2_" in id:
+            courses_url.append(links.get_attribute("href"))
+            courses_name.append(links.get_attribute("innerHTML"))
 
-    for project in projects:
-        get_project(browser, project, to_git)
+    for i in range(len(courses_url)):
+        print("[{}] : {}".format(i, courses_name[i]))
+    print("[q] : Quitter")
+
+    choice = input("Choix : ")
+    if choice == "q":
+        return
+
+    get_homework(browser, courses_url[int(choice)], courses_name[int(choice)])
 
 
 browser = connection()
