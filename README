@@ -1,0 +1,13 @@
+ESILV DVO is a tool written in Python to download the zip with all the exercises
+and homeworks from the students.
+
+You need to download:
+* geckodriver (from your package manager)
+* gitpython, selenium, wget from a python package downloader.
+
+Usage:
+  ./esilv_dvo.py
+adds the projects links.
+
+It came as an utility for me because I am the slackest man on Earth.
+I am not searching for any kind of optimization or good code quality.
