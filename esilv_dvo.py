@@ -8,8 +8,8 @@ import getpass
 
 
 def connection():
-    username = input("Username: ")
-    password = getpass.getpass("Password: ")
+    username = input("Mail : ")
+    password = getpass.getpass("Mot de passe : ")
     browser = webdriver.Firefox()
     url = "https://devinci-online.brightspace.com"
     browser.get(url)
@@ -27,6 +27,11 @@ def get_homework(browser, url, name):
     if not os.path.isdir(name):
         os.mkdir(name)
     os.chdir(name)
+
+    id = url.split("/")
+    id = id[len(id) - 1]
+    link = "https://devinci-online.brightspace.com/d2l/lms/dropbox/dropbox.d2l?ou=" + id
+    browser.get(link)
 
     while True:
         pass
