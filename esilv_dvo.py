@@ -33,9 +33,11 @@ def get_homeworks(browser):
     course_button = browser.find_element_by_class_name("d2l-dropdown-opener")
     course_button.click()
 
-for links in browser.find_elements_by_tag_name("a"):
-        link = links.get_attribute("href")
-        if link.startswith("https://intra.assistants.epita.fr/projects/"):
+    course = input("Quel cours? : ")
+
+    for links in browser.find_elements_by_tag_name("a"):
+        link = links.get_attribute("class")
+        if link.startswith(""):
             projects.append(link)
 
     for project in projects:
