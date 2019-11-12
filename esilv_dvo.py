@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from selenium import webdriver
-import wget
 import os
 import time
 import getpass
@@ -10,7 +9,15 @@ import getpass
 def connection():
     username = input("Mail : ")
     password = getpass.getpass("Mot de passe : ")
-    browser = webdriver.Firefox()
+
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference("browser.download.folderList", 1)
+    profile.set_preference("browser.download.panel.shown", False)
+    profile.set_preference("browser.helperApps.neverAsk.saveToDisk",
+            "application/zip,application/octet-stream,application/download")
+    profile.set_preference("browser.download.useDownloadDir", True)
+    browser = webdriver.Firefox(profile)
+
     url = "https://devinci-online.brightspace.com"
     browser.get(url)
     username_form = browser.find_element_by_id("userNameInput")
@@ -24,9 +31,6 @@ def connection():
 
 def get_homework(browser, url, name):
     browser.get(url)
-    if not os.path.isdir(name):
-        os.mkdir(name)
-    os.chdir(name)
 
     checkbox = browser.find_element_by_name("z_h_cb_sa")
     checkbox.click()
@@ -34,23 +38,15 @@ def get_homework(browser, url, name):
     dl_button = browser.find_element_by_id("z_u")
     dl_button.click()
 
-    while True:
-        dl_button = browser.find_element_by_class_name("d2l-button")
-        try:
-            dl_button.click()
-        except Exception:
-            pass
-        else:
-            break
+    dl_button = browser.find_elements_by_class_name("d2l-button")
+    time.sleep(10)
+    dl_button[7].click()
 
     os.chdir("..")
 
 
 def get_homeworks(browser, url, name):
     browser.get(url)
-    if not os.path.isdir(name):
-        os.mkdir(name)
-    os.chdir(name)
 
     id = url.split("/")
     id = id[len(id) - 1]
@@ -71,7 +67,10 @@ def get_homeworks(browser, url, name):
     print("[q] : Quitter")
 
     choice = input("Choix : ")
-    choice = choice.split(',')
+    if ',' in choice:
+        choice = choice.split(',')
+    else:
+        choice = list(choice)
     if 'q' in choice:
         return
 
@@ -82,10 +81,6 @@ def get_homeworks(browser, url, name):
 
 
 def get_courses(browser):
-    if not os.path.isdir("homeworks"):
-        os.mkdir("homeworks")
-    os.chdir("homeworks")
-
     courses_url = []
     courses_name = []
     time.sleep(5)

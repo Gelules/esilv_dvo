@@ -1,1 +1,2 @@
-Launche the download of the zip file.
+Find when the Download button is available instead of using those ugly sleep().
+Improve the exceptions.
